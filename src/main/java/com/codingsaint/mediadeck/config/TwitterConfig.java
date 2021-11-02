@@ -18,7 +18,7 @@ public class TwitterConfig {
                 .accessToken(properties.getAccessToken())
                 .accessTokenSecret(properties.getAccessTokenSecret())
                 .apiKey(properties.getKey())
-                .apiSecretKey(properties.getKey())
+                .apiSecretKey(properties.getSecretkey())
                 .build());
     }
 }
