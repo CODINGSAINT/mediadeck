@@ -3,6 +3,7 @@ package com.codingsaint.mediadeck.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
@@ -15,4 +16,5 @@ public class MediaDeckConfig {
         scheduler.initialize();
         return scheduler;
     }
+
 }

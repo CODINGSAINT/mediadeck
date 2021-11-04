@@ -8,10 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 
 public class StorageInitializer {
@@ -33,26 +30,13 @@ public class StorageInitializer {
     }
 
 
-    public static Storage storage(StorageConfigProperties storageProperties,
-                                  byte[] file,
-                                  String prjId,
-                                  String bucket) throws IOException {
-        storageProperties.setBucket(bucket);
-        storageProperties.setProjectId(prjId);
+    public static Storage storage(InputStream firebaseCredentialsStream,
+                                  String prjId) throws IOException {
+
         Credentials credentials = GoogleCredentials
-                .fromStream(new ByteArrayInputStream(file));
+                .fromStream(firebaseCredentialsStream);
         storage = StorageOptions.newBuilder().setCredentials(credentials)
                 .setProjectId(prjId).build().getService();
-        return storage;
-    }
-
-    public static Storage storage(StorageConfigProperties storageProperties
-                                  ) throws IOException {
-
-        Credentials credentials = GoogleCredentials
-                .fromStream(new FileInputStream(storageProperties.getFilePath())) ;
-        storage = StorageOptions.newBuilder().setCredentials(credentials)
-                .setProjectId(storageProperties.getProjectId()).build().getService();
         return storage;
     }
 

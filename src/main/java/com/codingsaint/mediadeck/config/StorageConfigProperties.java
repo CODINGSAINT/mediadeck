@@ -10,6 +10,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("mediadeck.storage")
 public class StorageConfigProperties {
     private String bucket;
-    private String filePath;
     private String projectId;
 }

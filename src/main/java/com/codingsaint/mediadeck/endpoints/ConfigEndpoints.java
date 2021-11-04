@@ -1,3 +1,4 @@
+/*
 package com.codingsaint.mediadeck.endpoints;
 
 import com.codingsaint.mediadeck.config.*;
@@ -45,3 +46,4 @@ public class ConfigEndpoints  implements IConfigEndpoints{
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+*/

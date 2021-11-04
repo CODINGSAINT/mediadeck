@@ -1,30 +1,29 @@
 package com.codingsaint.mediadeck.config;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class MediadeckInitializer implements CommandLineRunner {
-    private final FirebaseConfigParameters firebaseParameters;
     private final TwitterConfigProperties twitterConfigProperties;
     private final StorageConfigProperties storageConfigProperties;
+    private final FirebaseCredentials firebaseCredentials;
 
-    public MediadeckInitializer(FirebaseConfigParameters firebaseParameters,
+    public MediadeckInitializer(
                                 TwitterConfigProperties twitterConfigProperties,
-                                StorageConfigProperties storageConfigProperties) {
-        this.firebaseParameters = firebaseParameters;
+                                StorageConfigProperties storageConfigProperties, FirebaseCredentials firebaseCredentials) {
         this.twitterConfigProperties = twitterConfigProperties;
         this.storageConfigProperties = storageConfigProperties;
+        this.firebaseCredentials = firebaseCredentials;
     }
 
 
@@ -32,44 +31,25 @@ public class MediadeckInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        firebase();
+        storage();
+        twitter();
     }
 
     void firebase() throws Exception {
-        File file = null;
-        if (StringUtils.isNotEmpty(firebaseParameters.getFilePath()) &&
-                StringUtils.isNotEmpty(firebaseParameters.getDbURL())
-        ) {
-            file = new File(firebaseParameters.getFilePath().trim());
-            FireBaseInitializer.init(file, firebaseParameters.getDbURL());
-
-        } else {
-            LOG.error("Firebase is not setup , It will be required to setup firebase after startup");
-        }
+        FireBaseInitializer.init(firebaseCredentialByteStream());
     }
-
-    void storage() throws IOException {
-        if (StringUtils.isNotEmpty(storageConfigProperties.getFilePath())
-                && StringUtils.isNotEmpty(storageConfigProperties.getBucket())
-                && StringUtils.isNotEmpty(storageConfigProperties.getProjectId())) {
-            StorageInitializer.storage(storageConfigProperties);
-        } else {
-            LOG.error("Storage is not setup , It will be required to setup storage after startup");
-        }
-
+    public  InputStream firebaseCredentialByteStream() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(firebaseCredentials);
+        return  new ByteArrayInputStream(jsonString.getBytes());
+    }
+    void storage() throws Exception {
+        StorageInitializer.storage(firebaseCredentialByteStream(),storageConfigProperties.getProjectId());
     }
 
     void twitter() {
-        if (StringUtils.isNotEmpty(twitterConfigProperties.getAccessToken())
-                && StringUtils.isNotEmpty(twitterConfigProperties.getKey())
-                && StringUtils.isNotEmpty(twitterConfigProperties.getAccessTokenSecret())
-                && StringUtils.isNotEmpty(twitterConfigProperties.getAccessToken())
-
-        ) {
             TwitterConfig.twitterClient(twitterConfigProperties);
-        } else {
-            LOG.error("Twitter is not setup , It will be required to setup storage after startup");
-        }
-    }
+     }
 }
 
