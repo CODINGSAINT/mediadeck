@@ -69,47 +69,6 @@ class MediaService {
 
     }
 
-    async initFirebase( file ,databaseURL ){
-        let promises = [];
-            var formData = new FormData()
-            formData.append("file", file)
-            console.log(file)
-            promises.push(await axios.post(BASE_URL + "config/upload/firebase", formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Accept': '*/*',
-                        'databaseURL' : databaseURL
-                    }
-                }).then(response => {
-                    console.log(response.data)
-                })
-            )
-
-    }
-
-    async initStorage( file ,projectId ,bucket){
-        let promises = [];
-            var formData = new FormData()
-            formData.append("file", file)
-            promises.push(await axios.post(BASE_URL + "/config/upload/storage", formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Accept': '*/*',
-                        'projectId' : projectId,
-                        'bucket': bucket
-                    }
-                }).then(response => {
-                    console.log(response.data)
-                })
-            )
-
-    }
-
-    initTwitter(twitter) {
-        return axios.post("" + BASE_URL + 'config/twitter', twitter);
-    }
 
 }
 
