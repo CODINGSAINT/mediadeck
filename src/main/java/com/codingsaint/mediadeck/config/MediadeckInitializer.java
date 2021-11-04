@@ -32,7 +32,7 @@ public class MediadeckInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        LOG.info("Configuring {}",firebaseCredentials.getClient_id());
+        LOG.info("Configuring {}",firebaseCredentials);
         firebase();
         storage();
         twitter();
