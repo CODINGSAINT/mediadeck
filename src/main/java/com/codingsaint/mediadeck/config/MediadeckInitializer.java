@@ -33,7 +33,6 @@ public class MediadeckInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         LOG.info("Configuring {}",firebaseCredentials);
-        firebaseCredentials.setPrivate_key(firebaseCredentials.getPrivate_key_id().replaceAll("\n", System.lineSeparator()));
         firebase();
         storage();
         twitter();
