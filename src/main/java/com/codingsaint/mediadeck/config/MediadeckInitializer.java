@@ -1,6 +1,7 @@
 package com.codingsaint.mediadeck.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
+@Slf4j
 @Configuration
 public class MediadeckInitializer implements CommandLineRunner {
     private final TwitterConfigProperties twitterConfigProperties;
@@ -31,6 +32,7 @@ public class MediadeckInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        LOG.info("Configuring {}",firebaseCredentials.getClient_id());
         firebase();
         storage();
         twitter();
